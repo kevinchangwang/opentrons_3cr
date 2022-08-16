@@ -62,19 +62,13 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # distribute A components to the designated rows
     for component in A_Component_Dict:
-        right_pipette.pick_up_tip()
         right_pipette.transfer(20, source_plate.wells_by_name()[component],
                                destination_plate.rows_by_name()[A_Component_Dict[component]], new_tip='always')
-        right_pipette.drop_tip()
 
     # distribute B components to the designated plates
-    right_pipette.pick_up_tip()
     right_pipette.transfer(20, source_plate.wells_by_name()['C3'], destination_plate.wells(), new_tip='always')
-    right_pipette.drop_tip()
 
     # distribute C components to the designated columns
     for component in C_Component_Dict:
-        right_pipette.pick_up_tip()
         right_pipette.transfer(20, source_plate.wells_by_name()[component],
-                               destination_plate.columns_by_name()[A_Component_Dict[component]], new_tip='always')
-        right_pipette.drop_tip()
+                               destination_plate.columns_by_name()[C_Component_Dict[component]], new_tip='always')
