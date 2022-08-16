@@ -54,18 +54,19 @@ def run(protocol: protocol_api.ProtocolContext):
                                                 label='Destination_Plate_1')
     destination_plate_2 = protocol.load_labware('sarstedt_96_wellplate_200ul', location='2',
                                                 label='Destination_Plate_2')
-    tiprack_1 = protocol.load_labware('opentrons_96_tiprack_300ul', location='7', label='Tip_Rack_1')
-    tiprack_2 = protocol.load_labware('opentrons_96_tiprack_300ul', location='8', label='Tip_Rack_2')
-    tiprack_3 = protocol.load_labware('opentrons_96_tiprack_300ul', location='9', label='Tip_Rack_3')
+    tiprack_1 = protocol.load_labware('opentrons_96_tiprack_20ul', location='7', label='Tip_Rack_1')
+    tiprack_2 = protocol.load_labware('opentrons_96_tiprack_20ul', location='8', label='Tip_Rack_2')
+    tiprack_3 = protocol.load_labware('opentrons_96_tiprack_20ul', location='9', label='Tip_Rack_3')
+    tiprack_4 = protocol.load_labware('opentrons_96_tiprack_300ul', location='10', label='Tip_Rack_4')
     # pipette
     right_pipette = protocol.load_instrument('p20_single_gen2', mount='right',
                                              tip_racks=[tiprack_1, tiprack_2, tiprack_3])
     left_pipette = protocol.load_instrument('p300_single_gen2', mount='left',
-                                            tip_racks=[tiprack_1, tiprack_2, tiprack_3])
+                                            tip_racks=[tiprack_4])
     # transfer 87.5ul of solvent to both destination plates
-    left_pipette.distribute(87.5, solvent_plate.well('A1'), destination_plate_1.wells())
+    left_pipette.distribute(87.5, solvent_plate.well('A1'), destination_plate_1.wells(), new_tip='never')
     # left_pipette.drop_tip()
-    left_pipette.distribute(87.5, solvent_plate.well('A1'), destination_plate_2.wells())
+    left_pipette.distribute(87.5, solvent_plate.well('A2'), destination_plate_2.wells(), new_tip='never')
     # left_pipette.drop_tip()
 
     # distribute A components to the designated rows
