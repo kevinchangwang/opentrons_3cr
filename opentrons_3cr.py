@@ -66,7 +66,7 @@ def run(protocol: protocol_api.ProtocolContext):
                                destination_plate.rows_by_name()[A_Component_Dict[component]], new_tip='always')
 
     # distribute B components to the designated plates
-    right_pipette.transfer(20, source_plate.wells_by_name()['C3'], destination_plate.wells(), new_tip='always')
+    right_pipette.transfer(20, source_plate.wells('C3', 'C4'), destination_plate.wells(), new_tip='always')
 
     # distribute C components to the designated columns
     for component in C_Component_Dict:
