@@ -2,26 +2,28 @@ from opentrons import protocol_api
 
 # metadata
 metadata = {
-    'protocolName': "Opentrons_3CR",
+    'protocolName': "Opentrons_3CR_multi",
     'author': 'Kevin <kevinchang.wang@mail.utoronto.ca',
     'description': 'Opentrons liquid dispensing protocol for 3CR',
     'apiLevel': '2.12'
 }
 
 # This protocol will use the Opentrons OT-2 robot to combine the 3 components for the 3 component reaction
-# Version: Single channel pipette only
+# Version: Multi-channel pipette and single-channel pipette
 
 # Set the component volume here
 component_volume = 40
 
 # Change the location of the plates here
-source_plate_location = '10'
+headgroup_source_plate_location = '8'
+linker_source_plate_location = '7'
+tail_source_plate_location = '10'
 destination_plate_location = '11'
 
 # This protocol requires 3 pipette racks, 1 for each component. Indicate the locations here
-tip_rack_1_location = '7'
-tip_rack_2_location = '8'
-tip_rack_3_location = '9'
+tip_rack_1_location = '4'
+tip_rack_2_location = '5'
+tip_rack_3_location = '6'
 
 # Specifies the transfer of A components from the source plate well to destination plate rows
 A_Component_Dict = {
@@ -65,16 +67,19 @@ def run(protocol: protocol_api.ProtocolContext):
     # pipette
     right_pipette = protocol.load_instrument('p300_single_gen2', mount='right',
                                              tip_racks=[tiprack_1, tiprack_2, tiprack_3])
+    left_pipette = protocol.load_instrument('p300_multi_gen2', mount='right',
+                                             tip_racks=[tiprack_1, tiprack_2, tiprack_3])
+
+    # distribute B components to an empty plate
+    left_pipette.transfer(component_volume, source_plate.wells('C3', 'C4'), destination_plate.wells(),
+                           new_tip='never')
 
     # distribute A components to the designated rows
     for component in A_Component_Dict:
         right_pipette.transfer(component_volume, source_plate.wells_by_name()[component],
                                destination_plate.rows_by_name()[A_Component_Dict[component]], new_tip='always')
 
-    # distribute B components to the designated plates
-    right_pipette.transfer(component_volume, source_plate.wells('C3', 'C4'), destination_plate.wells(), new_tip='always')
-
     # distribute C components to the designated columns
     for component in C_Component_Dict:
-        right_pipette.transfer(component_volume, source_plate.wells_by_name()[component],
+        left_pipette.transfer(component_volume, source_plate.wells_by_name()[component],
                                destination_plate.columns_by_name()[C_Component_Dict[component]], new_tip='always')
