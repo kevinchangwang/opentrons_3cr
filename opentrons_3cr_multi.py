@@ -33,8 +33,8 @@ A_Component_Dict = {
     'D1': 'D',
     'A2': 'E',
     'B2': 'F',
-    'B3': 'G',
-    'B4': 'H'
+    'C2': 'G',
+    'D2': 'H'
 }
 
 # Specifies the transfer of C components (lipid tails) from the source plate well to destination plate columns
