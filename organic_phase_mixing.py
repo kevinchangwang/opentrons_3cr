@@ -46,6 +46,5 @@ def run(protocol: protocol_api.ProtocolContext):
     #Add ionizable lipid to PCR plate and mix
     p20_multi_pipette.transfer(ionizable_lipid_amount, ionizable_lipid_source_plate.wells(), organic_phase_plate.wells, new_tip='always', mix_after=(3,(ionizable_lipid_amount + lipid_master_mix_amount)/2))
 
-    #Formulate nanoparticle
-    p20_multi_pipette.
+
 
