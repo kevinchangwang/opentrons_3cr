@@ -2,9 +2,9 @@ from opentrons import protocol_api
 
 # metadata
 metadata = {
-    'protocolName': "3CR lipids to nanoparticle transfection",
+    'protocolName': "3CR lipids to nanoparticle formulation",
     'author': 'Kevin <kevinchang.wang@mail.utoronto.ca',
-    'description': 'Opentrons liquid dispensing protocol for 3cr lipids to nanoparticle transfection',
+    'description': 'Opentrons liquid dispensing protocol for 3cr lipids to nanoparticle formulation',
     'apiLevel': '2.12'
 }
 
