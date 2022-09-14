@@ -41,7 +41,6 @@ def run(protocol: protocol_api.ProtocolContext):
     mrna_source_plate = protocol.load_labware('usascientific_12_reservoir_22ml', location=mrna_plate_location,
                                               label='mRNA_Plate')
 
-
     # Load Tipracks
     tiprack_1 = protocol.load_labware('opentrons_96_tiprack_20ul', location=tip_rack_1_location, label='Tip_Rack_1')
     tiprack_2 = protocol.load_labware('opentrons_96_tiprack_20ul', location=tip_rack_2_location, label='Tip_Rack_2')
@@ -65,4 +64,3 @@ def run(protocol: protocol_api.ProtocolContext):
     # Add aqueous phase to the organic phase and mix
     p300_multi_pipette.transfer(aqueous_phase_amount, mrna_source_plate.columns_by_name()[mrna_col],
                                 nanoparticle_plate.wells(), new_tip='always', mix_after=(5, aqueous_phase_amount))
-
