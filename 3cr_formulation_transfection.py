@@ -8,10 +8,10 @@ metadata = {
     'apiLevel': '2.12'
 }
 
-ionizable_lipid_amount = 2
-lipid_master_mix_amount = 12
-aqueous_phase_amount = 20
-nanoparticle_amount = 2
+ionizable_lipid_amount = 5
+lipid_master_mix_amount = 3.5
+aqueous_phase_amount = 25.4
+nanoparticle_amount = 3
 
 tip_rack_1_location = '10'
 tip_rack_2_location = '7'
@@ -33,14 +33,14 @@ def run(protocol: protocol_api.ProtocolContext):
     master_mix_source_plate = protocol.load_labware('vwr_96_pcr_wellplate_200ul',
                                                     location=master_mix_source_plate_location,
                                                     label='Master_Mix_Source_Plate')
-    ionizable_lipid_source_plate = protocol.load_labware('sarstedt_96_wellplate_200ul',
+    ionizable_lipid_source_plate = protocol.load_labware('vwr_96_pcr_wellplate_200ul',
                                                          location=ionizable_lipid_source_plate_location,
                                                          label='Ionizable_Lipid_Plate')
     nanoparticle_plate = protocol.load_labware('vwr_96_pcr_wellplate_200ul', location=nanoparticle_plate_location,
                                                label='Nanoparticle_Destination_Plate')
-    mrna_source_plate = protocol.load_labware('vwr_96_pcr_wellplate_200ul', location=mrna_plate_location,
+    mrna_source_plate = protocol.load_labware('usascientific_12_reservoir_22ml', location=mrna_plate_location,
                                               label='mRNA_Plate')
-    cell_plate = protocol.load_labware('vwr_96_pcr_wellplate_200ul', location=cell_plate_location, label='Cell_Plate')
+    cell_plate = protocol.load_labware('corning_96_wellplate_360ul_flat', location=cell_plate_location, label='Cell_Plate')
 
     # Load Tipracks
     tiprack_1 = protocol.load_labware('opentrons_96_tiprack_20ul', location=tip_rack_1_location, label='Tip_Rack_1')
@@ -60,12 +60,11 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # Add ionizable lipid to PCR plate and mix
     p20_multi_pipette.transfer(ionizable_lipid_amount, ionizable_lipid_source_plate.wells(),
-                               nanoparticle_plate.wells(), new_tip='always',
-                               mix_after=(3, (ionizable_lipid_amount + lipid_master_mix_amount) / 2))
+                               nanoparticle_plate.wells(), new_tip='always')
 
     # Add aqueous phase to the organic phase and mix
     p300_multi_pipette.transfer(aqueous_phase_amount, mrna_source_plate.columns_by_name()[mrna_col],
-                                nanoparticle_plate.wells(), new_tip='always', mix_after=(3, aqueous_phase_amount))
+                                nanoparticle_plate.wells(), new_tip='always', mix_after=(5, aqueous_phase_amount))
 
     # Add nanoparticles to cells
     p20_multi_pipette.transfer(nanoparticle_amount, nanoparticle_plate.wells(), cell_plate.wells(), new_tip='always',
