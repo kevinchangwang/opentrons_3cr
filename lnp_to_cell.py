@@ -1,0 +1,60 @@
+from opentrons import protocol_api
+
+# metadata
+metadata = {
+    'protocolName': "LNP to Cell",
+    'author': 'Kevin <kevinchang.wang@mail.utoronto.ca',
+    'description': 'Opentrons liquid dispensing protocol to add LNPs to cells',
+    'apiLevel': '2.12'
+}
+
+# amounts
+lnp_amount = 3
+
+# plate locations
+lnp_plate_1_location = 4
+lnp_plate_2_location = 1
+
+cell_plate_1a_location = 5
+cell_plate_1b_location = 6
+cell_plate_2a_location = 2
+cell_plate_2b_location = 3
+
+# tip box locations
+tip_rack_1_location = 7
+tip_rack_2_location = 8
+
+
+def run(protocol: protocol_api.ProtocolContext):
+    # load labware
+    # load tipracks
+    tiprack_1 = protocol.load_labware('opentrons_96_tiprack_20ul', location=tip_rack_1_location, label='Tip_Rack_1')
+    tiprack_2 = protocol.load_labware('opentrons_96_tiprack_20ul', location=tip_rack_2_location, label='Tip_Rack_2')
+    # load pipettes
+    p20_multi_pipette = protocol.load_instrument('p20_multi_gen2', mount='left',
+                                                 tip_racks=[tiprack_1, tiprack_2])
+
+    # load lnp plates
+    lnp_plate_1 = protocol.load_labware('vwr_96_pcr_wellplate_200ul', location=lnp_plate_1_location,
+                                        label='LNP_Plate_1')
+    lnp_plate_2 = protocol.load_labware('vwr_96_pcr_wellplate_200ul', location=lnp_plate_2_location,
+                                        label='LNP_Plate_2')
+
+    # load cell plates
+    cell_plate_1a = protocol.load_labware('corning_96_wellplate_360ul_flat', location=cell_plate_1a_location,
+                                          label='Cell_Plate_1a')
+    cell_plate_1b = protocol.load_labware('corning_96_wellplate_360ul_flat', location=cell_plate_1b_location,
+                                          label='Cell_Plate_1b')
+    cell_plate_2a = protocol.load_labware('corning_96_wellplate_360ul_flat', location=cell_plate_2a_location,
+                                          label='Cell_Plate_2a')
+    cell_plate_2b = protocol.load_labware('corning_96_wellplate_360ul_flat', location=cell_plate_2b_location,
+                                          label='Cell_Plate_2b')
+
+    # transfer lnp to cell plates
+    for col in range(1, 12):
+        p20_multi_pipette.distribute(lnp_amount, lnp_plate_1.columns_by_index()[str(col)],
+                                     [cell_plate_1a.columns_by_index()[str(col)],
+                                      cell_plate_1b.columns_by_index()[str(col)]], new_tip="always", disposal_volume=0)
+        p20_multi_pipette.distribute(lnp_amount, lnp_plate_2.columns_by_index()[str(col)],
+                                     [cell_plate_2a.columns_by_index()[str(col)],
+                                      cell_plate_2b.columns_by_index()[str(col)]], new_tip="always", disposal_volume=0)
